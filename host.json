@@ -1,13 +1,3 @@
 {
-  "version": "2.0",
-  "logger": {
-        "categoryFilter": {
-            "defaultLevel": "Information",
-            "categoryLevels": {
-                "Host": "Error",
-                "Function": "Information",
-                "Host.Aggregator": "Information"
-            }
-        }
-    }
+  "version": "2.0"
 }

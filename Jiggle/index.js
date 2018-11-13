@@ -1,40 +1,63 @@
 const fs = require('fs');
 
-const FORM = '<form action="/api/Jiggle" method="get">' +
-    '<input type="radio" name="action" value="on">Jiggle!<br>' +
-    '<input type="radio" name="action" value="beep">Beep!<br>' +
-    '<input type="submit" value="submit"/></form>';
-
+const LI_ELEMENT = '<li class="list-group-item justify-content-between align-items-center list-group-item-secondary">';
 const queue = [];
 
 module.exports = async function (context, req) {
 
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    const action = req.query.action || (req.body && req.body.action);
+    const action = extractCommand(req);
 
-    if (action) {
-        context.log(`Received request for action [${action}]`);
-        queue.push(String(action).toLowerCase())
+    if (isKnownUiAction(action)) {
+        // known UI actions
+        context.log(`Received request for action [${JSON.stringify(action)}]`);
+        queue.push({
+            action: action,
+            dt: Date().toString()
+        })
     }
 
-    if (req.query.pop) {
+    if (action === 'pop') {
         const item = queue.shift();
         context.res = {
-            body: item
+            body: item.action
         };
         context.log(`Returning queued item [${item}]`)
-    }
-    else {
 
-        const html =   fs.readFileSync("jiggle/ui.html");
+    } else {
+        // no known action, return UI.
+        const buffer = fs.readFileSync("jiggle/ui.html");
+        const commandList = LI_ELEMENT + queue.map(e => formatListItem(e)).join('</li>\n' + LI_ELEMENT) + '</li>';
+        const html = buffer.toString().replace('~.~', commandList);
         //FORM + "<hr/>" + JSON.stringify(queue);
-        
+
         context.res = {
-            body: html + JSON.stringify(queue),
+            body: html,
             headers: {
                 'Content-Type': 'text/html'
             }
         };
     }
+
 };
+
+function formatListItem(listItem) {
+    return `<span class="badge badge-success">${listItem.action}</span> <p>${listItem.dt}</p>`
+}
+
+function extractCommand(req) {
+    if (req.query && req.query.pop) {
+        return 'pop';
+    }
+
+    if (isKnownUiAction(req.body)) {
+        return req.body;
+    }
+
+    return undefined;
+}
+
+function isKnownUiAction(action) {
+    return action && (action.startsWith('jiggle=') || action.startsWith('play='));
+}

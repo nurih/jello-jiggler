@@ -21,7 +21,7 @@ module.exports = async function (context, req) {
     if (action === 'pop') {
         const item = queue.shift();
         context.res = {
-            body: item.action
+            body: item && item.action
         };
         context.log(`Returning queued item [${item}]`)
 

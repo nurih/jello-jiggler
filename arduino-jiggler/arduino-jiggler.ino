@@ -72,7 +72,7 @@ void loop() {
         String line = client.readStringUntil('\n');
         Serial.println(String('<<< ') + line);
 
-        if (line.startsWith("on")) {
+        if (line.startsWith("jiggle=")) {
           isOn = true;
         }
       }

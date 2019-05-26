@@ -36,9 +36,28 @@ If you hit that endpoint with a browser, you will see a web page letting you cli
 
 If you hit the endpoint `https://your-function-app-name.azurewebsites.net/api/Jiggle?pop=true`, you will get back a single queued jiggler request. This is exactly what the Arduino board does: It periodically polls the API to dequeue a command. When it sees a `jiggle=true` command, it executes it.
 
-
 ### Arduino
 
-TBD
+The arduino code requires the correct board package matching the Feather Huzzah hardware. See [installing with boards manager](https://github.com/esp8266/Arduino#installing-with-boards-manager) 
+instructions on adding boards to the board manager.
 
+After the package is installed, you can choose the Feather Huzzah board in the Arduino IDE or VS Code.
 
+The code itself needs to achieve to key tasks: Connecting to WiFi, and processing jiggler commands.
+
+The WiFi setup can be done several ways. Rather than relying on flashing the Arduino with "permanent" credentials, I chose to include a separate file named `arduinosecret.h`. The file should be placed in the `arduino-jiggler` folder, alongside the main sketch `arduino-jiggler.ino`.
+
+The secrets shuold contain the following code:
+
+```c
+#define SECRET_WIFI_SSID "your network ssid"
+#define SECRET_WIFI_PASSWORD "your network password"
+#define FUNCTION_PATH_AND_QUERY "/api/Jiggle?pop=true"
+#define FUNCTION_HOST "https://your-function-app-name.azurewebsites.net"
+```
+
+Make sure to set the values of 'your network ssid', 'your network password' and 'your function app name' to some real values.
+
+Work to enable passing these values along during sketch compilation using the host's environment variables is pending.
+
+In the mean while, be sure to exclude the file from GIT check-ins by using `.gitignore`.

@@ -18,7 +18,7 @@ The project uses:
 
 The project uses an [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/3046) board. This board can be programmed using Arduino IDE, and has WiFi included on it. The board is easy to work with, can be operated off a 3V battery pack or a phone charging "brick" using the USB cable, and is widely available.
 
-The servo I used is a [TowerPro SG92R](http://www.towerpro.com.tw/product/sg92r-7/). It hass small enough power requirements to be rand directly off the arduino board, eliminating the need for extra power circuitry.
+The servo I used is a [TowerPro SG92R](http://www.towerpro.com.tw/product/sg92r-7/). It has small enough power requirements to run directly off the arduino board, eliminating the need for extra power circuitry.
 
 In addition to the hadware, some kind of platform had to be mad so that the servo can sit below the plate and would, well, jiggle the jello!. To that end, I 3D printed a platform. The [file can be found  here( https://github.com/nurih/jello-jiggler/raw/master/Jello-Jiggler-Platform.stl ) It's not terribly important that you use this platform, you can just glue the servo to something, or make a cardboard platform - go wild.
 
